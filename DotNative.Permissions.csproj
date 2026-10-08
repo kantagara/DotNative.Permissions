@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
+    <IsAotCompatible>true</IsAotCompatible><Version>0.1.0-preview.1</Version><PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression><DotNativePluginEntry>PermissionsPlugin</DotNativePluginEntry>
+    <DotNativeSourceRoot Condition="'$(DotNativeSourceRoot)' == ''">../dotNative</DotNativeSourceRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(DotNativeSourceRoot)/src/DotNative/DotNative.csproj" Condition="Exists('$(DotNativeSourceRoot)/src/DotNative/DotNative.csproj')" />
+    <PackageReference Include="DotNative" Version="0.1.0-preview.10" Condition="!Exists('$(DotNativeSourceRoot)/src/DotNative/DotNative.csproj')" />
+    <DotNativeChannel Include="dotnative.permissions" Version="1" Symbol="PermissionsChannel" />
+    <None Update="Platform/**/*;buildTransitive/**/*;Generated/**/*" Pack="true" PackagePath="%(Identity)" />
+    <None Update="dotnative/plugin.json;README.md;UPSTREAM.md;LICENSE" Pack="true" PackagePath="%(Identity)" />
+  </ItemGroup>
+</Project>
