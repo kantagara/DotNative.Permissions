@@ -7,23 +7,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsAotCompatible>true</IsAotCompatible>
-    <Version>0.1.0-preview.1</Version>
+    <Version>0.1.0-preview.18</Version>
+    <RepositoryUrl>https://github.com/kantagara/DotNative.Permissions</RepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <DotNativePluginEntry>PermissionsPlugin</DotNativePluginEntry>
-    <DotNativeSourceRoot Condition="'$(DotNativeSourceRoot)' == ''"
-      >../dotNative</DotNativeSourceRoot>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference
-      Include="$(DotNativeSourceRoot)/src/DotNative/DotNative.csproj"
-      Condition="Exists('$(DotNativeSourceRoot)/src/DotNative/DotNative.csproj')"
-    />
-    <PackageReference
-      Include="DotNative"
-      Version="0.1.0-preview.10"
-      Condition="!Exists('$(DotNativeSourceRoot)/src/DotNative/DotNative.csproj')"
-    />
+    <PackageReference Include="DotNative.Plugins.Core" Version="0.1.0-preview.18" />
+    <PackageReference Include="DotNative.Plugins.Build" Version="0.1.0-preview.18" PrivateAssets="none" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.16" />
     <None Remove="Platform/**/*;buildTransitive/**/*;Generated/**/*" />
     <None
       Include="Platform/**/*;buildTransitive/**/*;Generated/**/*"
@@ -35,4 +28,5 @@
   </ItemGroup>
   <Import Project="build/PluginAuthoring.props" />
   <Import Project="build/PluginAuthoring.targets" />
+  <Import Project="buildTransitive/DotNative.Permissions.targets" Condition="'$(DotNativePluginExport)' == 'true'" />
 </Project>
