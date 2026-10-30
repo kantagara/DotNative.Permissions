@@ -1,5 +1,32 @@
 # DotNative.Permissions
 
+## Standalone SDK API (preview.18 candidate)
+
+Reference this package and the MAUI, Avalonia or Uno adapter, or use the DotNative
+host. Register once on the UI thread after the owning window/root is ready:
+
+```csharp
+using DotNative.Plugins;
+using DotNative.Permissions;
+
+PluginHost.Register();
+var status = await Permissions.RequestAsync(PermissionKind.Camera, cancellationToken);
+```
+
+Static calls do not require DI. Applications may supply their own implementation
+with `PluginImplementations.Register<IPermissions>(() => new AppPermissions())`; keep the
+returned registration alive while it is needed. An application implementation can
+be a partial class split across platform files.
+
+This migration requires the matching SDK preview.18 candidate. Packages are not
+published to nuget.org. See the [SDK migration and runtime evidence](https://github.com/kantagara/DotNative.Plugins/pull/1)
+for exact tested hosts and platform limitations. Existing DI APIs remain available.
+
+Built-in native implementations support Android/iOS. Desktop applications must
+provide their own implementation through the registration above.
+
+## Existing API and platform details
+
 Checks and requests four runtime permissions on Android and iOS.
 
 ```csharp

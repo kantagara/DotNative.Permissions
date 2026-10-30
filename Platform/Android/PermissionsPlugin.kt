@@ -11,7 +11,6 @@ class PermissionsPlugin(private val activity: Activity) {
 
     private val pending = mutableMapOf<Int, Request>()
     private val asked = mutableSetOf<String>()
-    private var nextCode = 50000
     private val permissionListener: (Int, Array<String>, IntArray) -> Boolean =
         { code, permissions, grants ->
             val request = pending.remove(code)
@@ -102,12 +101,7 @@ class PermissionsPlugin(private val activity: Activity) {
             reply.success("granted")
             return
         }
-        if (nextCode > 65535) {
-
-            reply.failure("busy", "Permission request identifiers are exhausted")
-            return
-        }
-        val code = nextCode++
+        val code = NativeChannels.allocateRequestCode()
         pending[code] = Request(permission, reply)
         asked.add(permission)
         reply.onCancel = {
@@ -115,7 +109,7 @@ class PermissionsPlugin(private val activity: Activity) {
         }
         try {
 
-            activity.requestPermissions(arrayOf(permission), code)
+            NativeChannels.requestPermissions(activity, code, arrayOf(permission))
         } catch (error: Exception) {
 
             pending.remove(code)

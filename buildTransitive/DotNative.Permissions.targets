@@ -1,9 +1,38 @@
 <Project>
-  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'android-arm64' or '$(RuntimeIdentifier)' == 'android-x64'">
+  <ItemGroup Condition="'$(TargetPlatformIdentifier)' == 'android' or '$(RuntimeIdentifier)' == 'android-arm64' or '$(RuntimeIdentifier)' == 'android-x64'">
+    <DotNativeNativeSource Include="$(MSBuildThisFileDirectory)../Platform/Android/*.kt" />
     <DotNativePluginEntry Include="PermissionsPlugin" />
   </ItemGroup>
   <ItemGroup Condition="'$(RuntimeIdentifier)' == 'ios-arm64' or '$(RuntimeIdentifier)' == 'iossimulator-arm64'">
     <DotNativeNativeSource Include="$(MSBuildThisFileDirectory)../Platform/iOS/*.swift" />
     <DotNativePluginEntry Include="PermissionsPlugin" />
   </ItemGroup>
+  <Target Name="GetDotNativePluginAssets" Returns="@(_DotNativeExport)">
+    <ItemGroup>
+      <_DotNativeExport Include="@(DotNativeNativeSource-&gt;'%(FullPath)')">
+        <AssetType>DotNativeNativeSource</AssetType>
+      </_DotNativeExport>
+      <_DotNativeExport Include="@(DotNativePluginEntry)">
+        <AssetType>DotNativePluginEntry</AssetType>
+      </_DotNativeExport>
+      <_DotNativeExport Include="@(DotNativeNativeLibrary-&gt;'%(FullPath)')">
+        <AssetType>DotNativeNativeLibrary</AssetType>
+      </_DotNativeExport>
+      <_DotNativeExport Include="@(DotNativeNativeFramework)">
+        <AssetType>DotNativeNativeFramework</AssetType>
+      </_DotNativeExport>
+      <_DotNativeExport Include="@(DotNativeAppleFrameworkSearchPath-&gt;'%(FullPath)')">
+        <AssetType>DotNativeAppleFrameworkSearchPath</AssetType>
+      </_DotNativeExport>
+      <_DotNativeExport Include="@(DotNativeAppleDependencyManifest-&gt;'%(FullPath)')">
+        <AssetType>DotNativeAppleDependencyManifest</AssetType>
+      </_DotNativeExport>
+      <_DotNativeExport Include="@(DotNativeAndroidGradle-&gt;'%(FullPath)')">
+        <AssetType>DotNativeAndroidGradle</AssetType>
+      </_DotNativeExport>
+      <_DotNativeExport Include="@(DotNativeNativeLinkerArgument)">
+        <AssetType>DotNativeNativeLinkerArgument</AssetType>
+      </_DotNativeExport>
+    </ItemGroup>
+  </Target>
 </Project>
